@@ -1,0 +1,1298 @@
+@{
+    ViewData["Title"] = "Notable Projects";
+}
+@using System.IO
+
+<style>
+    /* ===================================
+       PROJECTS PAGE SCOPED STYLES
+       Using unique class prefix to avoid conflicts
+    =================================== */
+    
+    /* Hide main layout footer - this page has its own inside scroll container */
+    body > footer,
+    #main-footer {
+        display: none !important;
+    }
+    
+    /* Enable Locomotive Scroll */
+    html.has-scroll-smooth {
+        overflow: hidden !important;
+    }
+
+    html.has-scroll-dragging {
+        user-select: none;
+    }
+
+    .has-scroll-smooth body {
+        overflow: hidden !important;
+    }
+
+    .has-scroll-smooth [data-scroll-container] {
+        min-height: 100vh;
+    }
+
+    /* Locomotive Scroll directional animations */
+    [data-scroll] {
+        opacity: 0;
+        transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    [data-scroll][data-scroll-direction="horizontal"][data-scroll-from="left"] {
+        transform: translateX(-100px);
+    }
+    
+    [data-scroll][data-scroll-direction="horizontal"][data-scroll-from="right"] {
+        transform: translateX(100px);
+    }
+    
+    [data-scroll][data-scroll-direction="vertical"] {
+        transform: translateY(80px);
+    }
+
+    [data-scroll].is-inview {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    /* Overview section - Modern elegant scale from behind with blur */
+    .np-overview-title[data-scroll] {
+        opacity: 0;
+        transform: scale(0.6) translateY(60px);
+        filter: blur(20px);
+        transform-style: preserve-3d;
+        perspective: 1000px;
+    }
+    
+    .np-overview-card[data-scroll] {
+        opacity: 0;
+        transform: scale(0.85) translateY(40px);
+        filter: blur(12px);
+    }
+
+    .np-overview-title.is-inview {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+        transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 1.6s cubic-bezier(0.16, 1, 0.3, 1),
+                    filter 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .np-overview-card.is-inview {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+        transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    filter 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    /* Staggered card animations */
+    .np-overview-card:nth-child(1).is-inview { transition-delay: 0.1s; }
+    .np-overview-card:nth-child(2).is-inview { transition-delay: 0.2s; }
+    .np-overview-card:nth-child(3).is-inview { transition-delay: 0.3s; }
+
+    
+    /* Override any existing body styles for this page */
+    .np-page {
+        background: #fafafa !important;
+        color: #1d1d1f !important;
+        min-height: 100vh;
+    }
+
+    /* Ensure footer is visible inside scroll container */
+    .np-page footer {
+        display: block !important;
+        visibility: visible !important;
+        margin-top: 0;
+        position: relative;
+        z-index: 5;
+    }
+    
+    /* Add spacing before footer for contact button */
+    .np-projects-container {
+        padding-bottom: 100px;
+    }
+
+    /* ===================================
+       OVERVIEW SECTION
+    =================================== */
+    .np-overview-section {
+        width: 100%;
+        min-height: 100vh;
+        margin: 0;
+        padding: 100px 40px 120px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .np-overview-video-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        z-index: -1;
+        background-image: url('/images/about%20us.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .np-overview-video-bg::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(0, 113, 227, 0.15), rgba(0, 190, 188, 0.15));
+        pointer-events: none;
+    }
+
+    .np-overview-content-wrapper {
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        position: relative;
+        z-index: 2;
+    }
+
+    .np-scroll-indicator {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        animation: bounce 2s infinite;
+        z-index: 3;
+    }
+
+    .np-scroll-indicator span {
+        font-size: 0.875rem;
+        color: #1d1d1f;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .np-scroll-indicator::after {
+        content: '';
+        width: 24px;
+        height: 24px;
+        border-right: 2px solid #0071e3;
+        border-bottom: 2px solid #0071e3;
+        transform: rotate(45deg);
+    }
+
+    @@keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateX(-50%) translateY(0);
+        }
+        40% {
+            transform: translateX(-50%) translateY(-10px);
+        }
+        60% {
+            transform: translateX(-50%) translateY(-5px);
+        }
+    }
+
+    .np-overview-title {
+        text-align: center;
+        margin-bottom: 80px;
+    }
+
+    .np-overview-title h2 {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        color: #1d1d1f;
+        letter-spacing: -0.02em;
+        margin-bottom: 16px;
+        overflow: hidden;
+    }
+    
+    /* Character animation wrapper */
+    .np-title-line {
+        display: block;
+        overflow: hidden;
+    }
+    
+    .np-title-char {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(100%);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .np-title-char.is-inview {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .np-overview-title p {
+        font-size: 1.125rem;
+        color: #6e6e73;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .np-overview-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 32px;
+        margin-bottom: 40px;
+        align-items: start;
+    }
+
+    .np-overview-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 113, 227, 0.08);
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .np-overview-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #0071e3, #00bebc);
+        transform: scaleX(0);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .np-overview-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .np-overview-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 113, 227, 0.1);
+        border-color: #e5e5e7;
+    }
+
+    .np-overview-card.expanded {
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 113, 227, 0.12);
+        transform: translateY(-4px);
+    }
+
+    .np-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .np-card-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #0071e3, #00bebc);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .np-expand-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #f5f5f7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        font-size: 1.25rem;
+        color: #86868b;
+    }
+
+    .np-overview-card:hover .np-expand-icon {
+        background: #e8e8ed;
+        transform: rotate(90deg);
+    }
+
+    .np-overview-card.expanded .np-expand-icon {
+        transform: rotate(45deg);
+        background: #0071e3;
+        color: white;
+    }
+
+    .np-card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1d1d1f;
+        margin-bottom: 12px;
+        letter-spacing: -0.01em;
+    }
+
+    .np-card-subtitle {
+        font-size: 0.875rem;
+        color: #86868b;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+    }
+
+    .np-card-content {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease 0.1s;
+    }
+
+    .np-overview-card.expanded .np-card-content {
+        max-height: 2000px;
+        opacity: 1;
+    }
+
+    .np-card-content ul {
+        list-style: none !important;
+        padding: 24px 0 0 0 !important;
+        margin: 24px 0 0 0 !important;
+        border-top: 1px solid #e5e5e7;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+    }
+
+    .np-card-content li {
+        font-size: 1rem !important;
+        color: #515154 !important;
+        padding-left: 28px !important;
+        position: relative !important;
+        line-height: 1.6 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        margin: 0 !important;
+    }
+
+    .np-card-content li::before {
+        content: '' !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 8px !important;
+        width: 6px !important;
+        height: 6px !important;
+        background: #0071e3 !important;
+        border-radius: 50% !important;
+        display: block !important;
+    }
+
+    /* ===================================
+       MAIN CONTAINER
+    =================================== */
+    .np-projects-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 120px 40px;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* ===================================
+       PROJECT SECTION (ALTERNATING)
+    =================================== */
+    .np-project-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: start;
+        margin-bottom: 200px;
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .np-project-section:hover {
+        transform: translateY(-4px);
+    }
+
+    /* Left text, right image */
+    .np-project-section.layout-a .np-project-content {
+        order: 1;
+    }
+
+    .np-project-section.layout-a .np-project-image {
+        order: 2;
+    }
+
+    /* Right text, left image */
+    .np-project-section.layout-b .np-project-content {
+        order: 2;
+    }
+
+    .np-project-section.layout-b .np-project-image {
+        order: 1;
+    }
+
+    /* ===================================
+       PROJECT CONTENT (TEXT SIDE)
+    =================================== */
+    .np-project-content {
+        padding: 40px;
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .np-project-section:hover .np-project-content {
+        transform: translateX(8px);
+    }
+
+    .np-project-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #86868b;
+        font-weight: 600;
+        margin-bottom: 16px;
+        display: block;
+    }
+
+    .np-project-content h2 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        color: #1d1d1f;
+        letter-spacing: -0.02em;
+        margin-bottom: 32px;
+        line-height: 1.1;
+    }
+
+    .np-project-list {
+        list-style: none !important;
+        margin: 0 0 40px 0 !important;
+        padding: 0 !important;
+    }
+
+    .np-project-list li {
+        font-size: 1.125rem !important;
+        color: #515154 !important;
+        margin-bottom: 16px !important;
+        padding-left: 28px !important;
+        position: relative !important;
+        line-height: 1.5 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: transparent !important;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .np-project-list li:hover {
+        color: #0071e3 !important;
+        padding-left: 36px !important;
+    }
+
+    .np-project-list li::before {
+        content: '' !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 10px !important;
+        width: 8px !important;
+        height: 8px !important;
+        background: #0071e3 !important;
+        border-radius: 50% !important;
+        display: block !important;
+    }
+
+    .np-project-list li::marker {
+        display: none !important;
+    }
+
+    /* ===================================
+       PROJECT IMAGE (PLACEHOLDER)
+    =================================== */
+    .np-project-image {
+        position: relative;
+        aspect-ratio: 4/3;
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 113, 227, 0.06);
+        overflow: hidden;
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .np-project-section:hover .np-project-image {
+        box-shadow: 0 16px 56px rgba(0, 0, 0, 0.15), 0 8px 32px rgba(0, 113, 227, 0.12);
+        transform: scale(1.02);
+    }
+
+    .np-image-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #86868b;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    /* ===================================
+       RESPONSIVE DESIGN
+    =================================== */
+    @@media (max-width: 1024px) {
+        .np-projects-container {
+            padding: 80px 32px;
+        }
+
+        .np-project-section {
+            gap: 60px;
+            margin-bottom: 160px;
+        }
+
+        .np-project-content h2 {
+            font-size: 2.25rem;
+        }
+
+        .np-project-list li {
+            font-size: 1rem !important;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .np-projects-container {
+            padding: 60px 24px;
+        }
+
+        .np-project-section {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 120px;
+        }
+
+        /* Reset order for mobile - image always on top */
+        .np-project-section.layout-a .np-project-content,
+        .np-project-section.layout-b .np-project-content {
+            order: 2;
+        }
+
+        .np-project-section.layout-a .np-project-image,
+        .np-project-section.layout-b .np-project-image {
+            order: 1;
+        }
+
+        .np-project-content {
+            padding: 0;
+        }
+
+        .np-project-content h2 {
+            font-size: 1.875rem;
+            margin-bottom: 24px;
+        }
+
+        .np-project-list {
+            margin-bottom: 32px !important;
+        }
+
+        .np-project-list li {
+            font-size: 0.9375rem !important;
+            margin-bottom: 12px !important;
+        }
+    }
+
+    @@media (max-width: 640px) {
+        .np-overview-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .np-card-content ul {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* ===================================
+    RAILWAY STACKED CARDS ANIMATION TO GRID
+    =================================== */
+
+    .railway-free-grid {
+        position: relative;
+        width: 100%;
+        max-width: 560px;
+        height: 450px;
+        perspective: 1200px;
+    }
+
+    .railway-free-grid img {
+        width: 100%;
+        max-width: 260px;
+        height: auto;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+        border-radius: 16px;
+        box-shadow: 0 16px 48px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.12);
+        /* Initial state: all tightly stacked at center like a deck of cards */
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    /* Each card starts stacked in ONE place with slight rotations - tight deck */
+    .railway-free-grid img:nth-child(1) {
+        transform: translate(-50%, -50%) rotate(-12deg) scale(0.6);
+        z-index: 4;
+    }
+    .railway-free-grid img:nth-child(2) {
+        transform: translate(-50%, -50%) rotate(-4deg) scale(0.62);
+        z-index: 3;
+    }
+    .railway-free-grid img:nth-child(3) {
+        transform: translate(-50%, -50%) rotate(4deg) scale(0.62);
+        z-index: 2;
+    }
+    .railway-free-grid img:nth-child(4) {
+        transform: translate(-50%, -50%) rotate(12deg) scale(0.6);
+        z-index: 1;
+    }
+    
+    /* Animate when in view - cards fan out to 2x2 grid positions */
+    .railway-free-grid.is-inview img {
+        opacity: 1;
+    }
+    
+    /* Fan out to 2x2 grid - top left */
+    .railway-free-grid.is-inview img:nth-child(1) {
+        transform: translate(-130%, -110%) rotate(-2deg) scale(1);
+        transition-delay: 0.05s;
+    }
+    
+    /* Fan out to 2x2 grid - top right */
+    .railway-free-grid.is-inview img:nth-child(2) {
+        transform: translate(30%, -110%) rotate(2deg) scale(1);
+        transition-delay: 0.15s;
+    }
+    
+    /* Fan out to 2x2 grid - bottom left */
+    .railway-free-grid.is-inview img:nth-child(3) {
+        transform: translate(-130%, 10%) rotate(-1deg) scale(1);
+        transition-delay: 0.25s;
+    }
+    
+    /* Fan out to 2x2 grid - bottom right */
+    .railway-free-grid.is-inview img:nth-child(4) {
+        transform: translate(30%, 10%) rotate(1deg) scale(1);
+        transition-delay: 0.35s;
+    }
+
+    /* Hover effect for railway images */
+    @@media (hover: hover) {
+        .railway-free-grid.is-inview img:hover {
+            box-shadow: 0 24px 60px rgba(0,0,0,0.25), 0 12px 30px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        
+        .railway-free-grid.is-inview img:nth-child(1):hover {
+            transform: translate(-130%, -115%) rotate(-2deg) scale(1.08);
+        }
+        .railway-free-grid.is-inview img:nth-child(2):hover {
+            transform: translate(30%, -115%) rotate(2deg) scale(1.08);
+        }
+        .railway-free-grid.is-inview img:nth-child(3):hover {
+            transform: translate(-130%, 5%) rotate(-1deg) scale(1.08);
+        }
+        .railway-free-grid.is-inview img:nth-child(4):hover {
+            transform: translate(30%, 5%) rotate(1deg) scale(1.08);
+        }
+    }
+
+    /* Mobile */
+    @@media (max-width: 768px) {
+        .railway-free-grid {
+            height: 350px;
+            max-width: 100%;
+        }
+
+        .railway-free-grid img {
+            max-width: 140px;
+        }
+
+        /* Mobile initial - still stacked */
+        .railway-free-grid img:nth-child(1),
+        .railway-free-grid img:nth-child(2),
+        .railway-free-grid img:nth-child(3),
+        .railway-free-grid img:nth-child(4) {
+            transform: translate(-50%, -50%) rotate(0deg) scale(0.7);
+        }
+        
+        /* Mobile fan out positions */
+        .railway-free-grid.is-inview img:nth-child(1) {
+            transform: translate(-110%, -100%) rotate(-2deg) scale(1);
+        }
+        .railway-free-grid.is-inview img:nth-child(2) {
+            transform: translate(10%, -100%) rotate(2deg) scale(1);
+        }
+        .railway-free-grid.is-inview img:nth-child(3) {
+            transform: translate(-110%, 0%) rotate(-1deg) scale(1);
+        }
+        .railway-free-grid.is-inview img:nth-child(4) {
+            transform: translate(10%, 0%) rotate(1deg) scale(1);
+        }
+    }
+
+    .np-project-section.layout-a .railway-free-grid {
+        grid-column: 2;
+        justify-self: flex-start;
+    }
+
+    /* Lower railway image grid */
+    .np-project-section.layout-a .railway-free-grid {
+        margin-top: 120px; /* adjust: 60px – 120px */
+    }
+
+    /* Raise ONLY Railway text */
+    @@media (min-width: 1025px) {
+        .np-project-section.np-railway .np-project-content {
+            margin-top: -375px; /* slightly softer */
+        }
+    }
+
+
+
+    /* Mobile: stack normally */
+    @@media (max-width: 768px) {
+        .np-project-section.layout-a .np-project-content,
+        .np-project-section.layout-a .railway-free-grid {
+            grid-column: 1;
+        }
+    }
+
+    @@media (max-width: 768px) {
+
+    /* Reset railway lift on mobile */
+    .np-project-section.np-railway .np-project-content {
+        margin-top: 0;
+        transform: none;
+    }
+
+    /* Tighten mobile spacing */
+    .np-project-section {
+        margin-bottom: 80px;
+    }
+
+    .np-project-content {
+        padding-top: 0;
+    }
+}
+
+    /* ===================================
+    SPECIAL VEHICLES STACKED CARDS DESIGN
+    Animation: Cards start stacked, then fan out like a deck
+    =================================== */
+
+    .special-squares-container {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        height: 400px;
+        margin: 0 auto;
+        perspective: 1200px;
+    }
+
+    .special-square {
+        position: absolute;
+        width: 280px;
+        height: 350px;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.12);
+        background-size: cover;
+        background-position: center;
+        /* Initial state: all stacked at center */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(0deg) scale(0.85);
+        opacity: 0;
+        transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        overflow: hidden;
+    }
+    
+    /* Add subtle border */
+    .special-square::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 16px;
+        pointer-events: none;
+    }
+    
+    /* Fan out animation when in view */
+    .special-squares-container.is-inview .special-square {
+        opacity: 1;
+    }
+
+    .special-squares-container.is-inview .special-square:nth-child(1) {
+        transform: translate(-50%, -50%) translateX(-220px) translateY(-35px) rotate(-14deg) scale(0.9);
+        z-index: 1;
+        transition-delay: 0.1s;
+    }
+
+    .special-squares-container.is-inview .special-square:nth-child(2) {
+        transform: translate(-50%, -50%) translateX(-110px) translateY(-15px) rotate(-7deg) scale(0.95);
+        z-index: 2;
+        transition-delay: 0.15s;
+    }
+
+    .special-squares-container.is-inview .special-square:nth-child(3) {
+        transform: translate(-50%, -50%) translateX(0) translateY(0) rotate(0deg) scale(1);
+        z-index: 3;
+        transition-delay: 0.2s;
+    }
+
+    .special-squares-container.is-inview .special-square:nth-child(4) {
+        transform: translate(-50%, -50%) translateX(110px) translateY(-15px) rotate(7deg) scale(0.95);
+        z-index: 2;
+        transition-delay: 0.25s;
+    }
+
+    .special-squares-container.is-inview .special-square:nth-child(5) {
+        transform: translate(-50%, -50%) translateX(220px) translateY(-35px) rotate(14deg) scale(0.9);
+        z-index: 1;
+        transition-delay: 0.3s;
+    }
+
+    .special-square:hover {
+        transform: translate(-50%, -50%) translateY(-30px) rotate(0deg) scale(1.8) !important;
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.35);
+        z-index: 100 !important;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border-radius: 8px;
+    }
+    
+    /* Dim other cards when one is hovered */
+    .special-squares-container:has(.special-square:hover) .special-square:not(:hover) {
+        opacity: 0.4;
+        filter: blur(2px);
+        transform: scale(0.9) !important;
+    }
+
+    /* Mobile */
+    @@media (max-width: 768px) {
+        .special-squares-container {
+            max-width: 100%;
+            height: 300px;
+        }
+
+        .special-square {
+            width: 200px;
+            height: 250px;
+        }
+        
+        .special-squares-container.is-inview .special-square:nth-child(1) {
+            transform: translate(-50%, -50%) translateX(-130px) translateY(-25px) rotate(-14deg) scale(0.85);
+        }
+        
+        .special-squares-container.is-inview .special-square:nth-child(2) {
+            transform: translate(-50%, -50%) translateX(-65px) translateY(-12px) rotate(-7deg) scale(0.9);
+        }
+        
+        .special-squares-container.is-inview .special-square:nth-child(4) {
+            transform: translate(-50%, -50%) translateX(65px) translateY(-12px) rotate(7deg) scale(0.9);
+        }
+        
+        .special-squares-container.is-inview .special-square:nth-child(5) {
+            transform: translate(-50%, -50%) translateX(130px) translateY(-25px) rotate(14deg) scale(0.85);
+        }
+    }
+
+    .np-project-section.layout-b .special-squares-container {
+        grid-column: 1;
+        justify-self: center;
+    }
+
+    /* ===================================
+    BUSINESS SUPPORT FUTURISTIC IMAGE DESIGN
+    =================================== */
+
+    .np-business-image {
+        position: relative;
+        aspect-ratio: 4/3;
+        background: url('@Url.Content("~/images/business.jpg")') center/cover no-repeat, linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.15),
+            0 8px 32px rgba(102, 126, 234, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        backdrop-filter: blur(10px);
+    }
+
+    .np-business-image:hover {
+        background-size: 105% 105%;
+    }
+
+    .np-business-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            135deg,
+            rgba(102, 126, 234, 0.05) 0%,
+            rgba(118, 75, 162, 0.1) 50%,
+            rgba(0, 0, 0, 0.1) 100%
+        );
+        z-index: 2;
+        backdrop-filter: blur(1px);
+        transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .np-business-image:hover .np-business-overlay {
+        background: linear-gradient(
+            135deg,
+            rgba(102, 126, 234, 0.05) 0%,
+            rgba(118, 75, 162, 0.1) 50%,
+            rgba(0, 0, 0, 0.2) 100%
+        );
+        backdrop-filter: blur(0.5px);
+    }
+
+    .np-business-image:hover {
+        box-shadow:
+            0 32px 80px rgba(0, 0, 0, 0.2),
+            0 16px 48px rgba(102, 126, 234, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        transform: scale(1.02) translateY(-8px);
+    }
+
+    /* Futuristic glow effect */
+    .np-business-image::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #667eea, #764ba2, #667eea);
+        border-radius: 26px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        filter: blur(8px);
+    }
+
+    .np-business-image:hover::after {
+        opacity: 0.6;
+    }
+
+    /* Smooth scroll animations */
+    .np-project-section.np-business .np-business-image[data-scroll].is-inview {
+        animation: businessGlow 2s ease-out forwards;
+    }
+
+    @@keyframes businessGlow {
+        0% {
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.15),
+                0 8px 32px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        50% {
+            box-shadow:
+                0 24px 72px rgba(0, 0, 0, 0.18),
+                0 12px 40px rgba(102, 126, 234, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        100% {
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.15),
+                0 8px 32px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+    }
+
+    /* Ensure Business Support image container is on the right for layout-a */
+    .np-project-section.layout-a .np-business-image {
+        order: 2;
+    }
+    
+    .np-project-section.layout-a.np-business .np-project-content {
+        order: 1;
+    }
+
+    /* Mobile responsive */
+    @@media (max-width: 768px) {
+        .np-business-image {
+            aspect-ratio: 3/2;
+            border-radius: 16px;
+            order: 1 !important; /* Image on top for mobile */
+        }
+
+        .np-business-image::after {
+            border-radius: 18px;
+            filter: blur(4px);
+        }
+    }
+
+    /* Remove extra gap after final section */
+    .np-project-section:last-child {
+        margin-bottom: 80px;
+    }
+
+    .np-projects-container {
+        padding-bottom: 20px;
+    }
+
+
+
+</style>
+
+<div class="np-page" data-scroll-container>
+    <!-- ===================================
+         OVERVIEW SECTION
+    =================================== -->
+    <section class="np-overview-section" data-scroll-section>
+        <div class="np-overview-video-bg"></div>
+        
+        <div class="np-overview-content-wrapper">
+            <div class="np-overview-title" data-scroll data-scroll-speed="0.5">
+                <h2>Our Expertise</h2>
+                <p data-scroll data-scroll-speed="0.3" data-scroll-delay="0.2">Explore our comprehensive project portfolio across three key sectors</p>
+            </div>
+
+            <div class="np-overview-cards">
+            <!-- Railway Card -->
+            <div class="np-overview-card" data-scroll data-scroll-speed="0.8">
+
+                <div class="np-card-header">
+                    <div class="np-card-icon">🚄</div>
+                    <div class="np-expand-icon">+</div>
+                </div>
+                <h3 class="np-card-title">Railway Vehicles & Systems</h3>
+                <p class="np-card-subtitle">Modern Rail Solutions</p>
+                <div class="np-card-content">
+                    <ul>
+                        <li>QR Brisbane EMU – Downer EDI Rail</li>
+                        <li>WestRail Perth EMU – Downer EDI Rail</li>
+                        <li>KL LRT Ampang Line – Downer EDI Rail / Bombardier</li>
+                        <li>KL & Mumbai & Brazil Monorail – MTrans / Scomi Group</li>
+                        <li>KTMB EMU & Intercity – Trovon Group</li>
+                        <li>KL MRT Line 1 – Trovon Group</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Commercial Vehicle Card -->
+            <div class="np-overview-card" data-card="commercial">
+                <div class="np-card-header">
+                    <div class="np-card-icon">🚛</div>
+                    <div class="np-expand-icon">+</div>
+                </div>
+                <h3 class="np-card-title">Commercial & Special Vehicles</h3>
+                <p class="np-card-subtitle">Heavy-Duty Excellence</p>
+                <div class="np-card-content">
+                    <ul>
+                        <li>MAN Truck & Bus – Scomi Group</li>
+                        <li>Volvo Bus – Scomi Group</li>
+                        <li>Alexander Dennis – Scomi Group</li>
+                        <li>Scania Hazmat Vehicles – Scomi Group</li>
+                        <li>Petronas Petroleum Tankers – Scomi Group</li>
+                        <li>Safeguards Armoured Vehicles – Protech Master Coach</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Business Support Card -->
+            <div class="np-overview-card" data-card="business">
+                <div class="np-card-header">
+                    <div class="np-card-icon">⚙️</div>
+                    <div class="np-expand-icon">+</div>
+                </div>
+                <h3 class="np-card-title">Business Support</h3>
+                <p class="np-card-subtitle">Strategic Innovation</p>
+                <div class="np-card-content">
+                    <ul>
+                        <li>Design & Construction of a 150,000 sqft Railcar Manufacturing Facility</li>
+                        <li>Localization of Railcar Manufacturing in Brazil</li>
+                        <li>Development of Local Supply Chain in Malaysia & Brazil</li>
+                        <li>Start-up & Operation of a Rail Vehicle Company in Malaysia</li>
+                        <li>JV between Malaysian & Czech companies for Railway Systems</li>
+                        <li>Development & Registration of Rail Vehicle IP / Patents in Malaysia & India</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+        <div class="np-scroll-indicator">
+            <span>Scroll</span>
+        </div>
+    </section>
+
+    <!-- ===================================
+         PROJECTS CONTAINER
+    =================================== -->
+    <div class="np-projects-container" data-scroll-section>
+
+        <!-- RAILWAY PROJECTS SECTION -->
+        <section class="np-project-section layout-a np-railway" data-scroll data-scroll-speed="1" data-scroll-class="is-inview">
+            <div class="np-project-content" data-scroll data-scroll-speed="1" data-scroll-direction="horizontal" data-scroll-from="left" data-scroll-class="is-inview">
+                <span class="np-project-label" data-scroll data-scroll-speed="1" data-scroll-delay="0.15">Railway Vehicles & Systems</span>
+                <h2 data-scroll data-scroll-speed="1.2" data-scroll-delay="0.25">World-Class Rail Engineering</h2>
+                <ul class="np-project-list">
+                    <li data-scroll data-scroll-speed="0.5" data-scroll-delay="0.05" data-scroll-class="is-inview">QR Brisbane EMU – Downer EDI Rail</li>
+                    <li data-scroll data-scroll-speed="0.6" data-scroll-delay="0.10" data-scroll-class="is-inview">WestRail Perth EMU – Downer EDI Rail</li>
+                    <li data-scroll data-scroll-speed="0.7" data-scroll-delay="0.15" data-scroll-class="is-inview">KL LRT Ampang Line – Downer EDI Rail / Bombardier</li>
+                    <li data-scroll data-scroll-speed="0.8" data-scroll-delay="0.20" data-scroll-class="is-inview">KL & Mumbai & Brazil Monorail – MTrans / Scomi Group</li>
+                    <li data-scroll data-scroll-speed="0.9" data-scroll-delay="0.25" data-scroll-class="is-inview">KTMB EMU & Intercity – Trovon Group</li>
+                    <li data-scroll data-scroll-speed="1.0" data-scroll-delay="0.30" data-scroll-class="is-inview">KL MRT Line 1 – Trovon Group</li>
+                </ul>
+            </div>
+
+            @{
+                var railwayImages = new[]
+                {
+                    "1.png",
+                    "2.jpg",
+                    "3.jpg",
+                    "4.jpg"
+                };
+            }
+
+            <div class="railway-free-grid" data-scroll data-scroll-speed="-0.6" data-scroll-direction="horizontal" data-scroll-from="right">
+                @foreach (var img in railwayImages)
+                {
+                    <img src="~/images/railway/@img" alt="Railway Project Image" />
+                }
+            </div>
+
+
+        </section>
+
+        
+
+        <!-- COMMERCIAL VEHICLE PROJECTS SECTION -->
+        <section class="np-project-section layout-b np-commercial" data-scroll data-scroll-speed="1" data-scroll-class="is-inview">
+            <div class="np-project-content" data-scroll data-scroll-speed="1" data-scroll-direction="horizontal" data-scroll-from="right" data-scroll-class="is-inview">
+                <span class="np-project-label" data-scroll data-scroll-speed="1" data-scroll-delay="0.15">Commercial & Special Vehicles</span>
+                <h2 data-scroll data-scroll-speed="1.2" data-scroll-delay="0.25">Heavy-Duty Vehicle Excellence</h2>
+                <ul class="np-project-list">
+                    <li data-scroll data-scroll-speed="0.5" data-scroll-delay="0.05" data-scroll-class="is-inview">MAN Truck & Bus – Scomi Group</li>
+                    <li data-scroll data-scroll-speed="0.6" data-scroll-delay="0.10" data-scroll-class="is-inview">Volvo Bus – Scomi Group</li>
+                    <li data-scroll data-scroll-speed="0.7" data-scroll-delay="0.15" data-scroll-class="is-inview">Alexander Dennis – Scomi Group</li>
+                    <li data-scroll data-scroll-speed="0.8" data-scroll-delay="0.20" data-scroll-class="is-inview">Scania Hazmat Vehicles – Scomi Group</li>
+                    <li data-scroll data-scroll-speed="0.9" data-scroll-delay="0.25" data-scroll-class="is-inview">Petronas Petroleum Tankers – Scomi Group</li>
+                    <li data-scroll data-scroll-speed="1.0" data-scroll-delay="0.30" data-scroll-class="is-inview">Safeguards Armoured Vehicles – Protech Master Coach</li>
+                </ul>
+            </div>
+
+            @{
+                var specialImages = new[]
+                {
+                    "1.jpg",
+                    "2.jpg",
+                    "3.jpg",
+                    "4.jpg",
+                    "5.JPG"
+                };
+            }
+
+            <div class="special-squares-container" data-scroll data-scroll-speed="-0.5" data-scroll-direction="horizontal" data-scroll-from="left">
+                @foreach (var img in specialImages)
+                {
+                    <div class="special-square" style="background-image: url('@Url.Content("~/images/special/" + img)')"></div>
+                }
+            </div>
+        </section>
+
+        <!-- BUSINESS SUPPORT PROJECTS SECTION -->
+        <section class="np-project-section layout-a np-business" data-scroll data-scroll-speed="1" data-scroll-class="is-inview">
+            <div class="np-project-content" data-scroll data-scroll-speed="2" data-scroll-direction="horizontal" data-scroll-from="left" data-scroll-class="is-inview">
+                <span class="np-project-label" data-scroll data-scroll-speed="1" data-scroll-delay="0.15">Business Support</span>
+                <h2 data-scroll data-scroll-speed="1.5" data-scroll-delay="0.25">Strategic Development & Innovation</h2>
+                <ul class="np-project-list">
+                    <li data-scroll data-scroll-speed="0.5" data-scroll-delay="0.05" data-scroll-direction="vertical" data-scroll-class="is-inview">Design & Construction of a 150,000 sqft Railcar Manufacturing Facility</li>
+                    <li data-scroll data-scroll-speed="0.6" data-scroll-delay="0.10" data-scroll-direction="vertical" data-scroll-class="is-inview">Localization of Railcar Manufacturing in Brazil</li>
+                    <li data-scroll data-scroll-speed="0.7" data-scroll-delay="0.15" data-scroll-direction="vertical" data-scroll-class="is-inview">Development of Local Supply Chain in Malaysia & Brazil</li>
+                    <li data-scroll data-scroll-speed="0.8" data-scroll-delay="0.20" data-scroll-direction="vertical" data-scroll-class="is-inview">Start-up & Operation of a Rail Vehicle Company in Malaysia</li>
+                    <li data-scroll data-scroll-speed="0.9" data-scroll-delay="0.25" data-scroll-direction="vertical" data-scroll-class="is-inview">JV between Malaysian & Czech companies for Railway Systems</li>
+                    <li data-scroll data-scroll-speed="1.0" data-scroll-delay="0.30" data-scroll-direction="vertical" data-scroll-class="is-inview">Development & Registration of Rail Vehicle IP / Patents in Malaysia & India</li>
+                </ul>
+            </div>
+            <div class="np-business-image" data-scroll data-scroll-speed="-1.2" data-scroll-direction="horizontal" data-scroll-from="right" data-scroll-class="is-inview">
+                <div class="np-business-overlay"></div>
+            </div>
+        </section>
+
+    </div>
+    
+    <!-- Shared Footer with Glassy Design -->
+    @await Html.PartialAsync("_Footer")
+</div>
+
+<!-- Shared Floating Contact Button with Popup -->
+@await Html.PartialAsync("_ContactButton")
+
+@section Scripts {
+    <!-- Locomotive Scroll Library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Locomotive Scroll
+            const scroll = new LocomotiveScroll({
+                el: document.querySelector('[data-scroll-container]'),
+                smooth: true,
+                multiplier: 0.8,
+                lerp: 0.05,
+                smartphone: {
+                    smooth: true
+                },
+                tablet: {
+                    smooth: true
+                }
+            });
+
+            // Update scroll on window resize
+            window.addEventListener('resize', () => {
+                scroll.update();
+            });
+
+            // Expandable card functionality on hover
+            const cards = document.querySelectorAll('.np-overview-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.classList.add('expanded');
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.classList.remove('expanded');
+                });
+            });
+            
+            // Update Locomotive Scroll after footer is in DOM
+            setTimeout(() => {
+                scroll.update();
+            }, 500);
+            
+            // Additional update after images load
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    scroll.update();
+                }, 300);
+            });
+        });
+    </script>
+}

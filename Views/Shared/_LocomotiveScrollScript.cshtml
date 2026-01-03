@@ -1,0 +1,32 @@
+@* Shared Locomotive Scroll initialization script *@
+<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollContainer = document.querySelector('[data-scroll-container]');
+        
+        if (scrollContainer) {
+            const locoScroll = new LocomotiveScroll({
+                el: scrollContainer,
+                smooth: true,
+                multiplier: 0.8,
+                lerp: 0.05,
+                smartphone: {
+                    smooth: true
+                },
+                tablet: {
+                    smooth: true
+                }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                locoScroll.update();
+            });
+            
+            // Update scroll after images load
+            window.addEventListener('load', () => {
+                locoScroll.update();
+            });
+        }
+    });
+</script>

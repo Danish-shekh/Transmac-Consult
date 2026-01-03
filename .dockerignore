@@ -1,0 +1,17 @@
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/*.*proj.user
+**/*.dbmdl
+**/*.jfm
+**/bin
+**/obj
+**/out
+**/publish
+**/node_modules
+**/.DS_Store
+**/launchSettings.json
+README.md
+*.md
+.github/

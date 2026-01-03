@@ -1,0 +1,120 @@
+@{
+    ViewData["Title"] = "Founder & Leadership";
+}
+
+@await Html.PartialAsync("_LocomotiveScrollStyles")
+
+<div data-scroll-container>
+    <div class="hero-section" data-scroll-section style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/leadership.jpg'); background-size: cover; background-position: center; background-attachment: fixed; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="container">
+            <h1 data-scroll style="color: white;">Founder & Leadership</h1>
+            <p data-scroll style="color: white;">30 Years Industry Experience | Proven International Track Record</p>
+        </div>
+    </div>
+
+    <div class="content-section" data-scroll-section>
+        <div class="container">
+            <h2 data-scroll>Founder & CEO Profile</h2>
+            
+            <div class="grid-2">
+                <div data-scroll data-scroll-animation="fade-left">
+                    <div class="card">
+                        <h3>Industry Experience</h3>
+                        <p>
+                            <strong>Over 30 Years of Excellence</strong>
+                        </p>
+                        <p>
+                            Our Founder and CEO brings over 30 years of industry experience, showcasing a 
+                            wealth of knowledge and expertise in the rail and commercial vehicle sectors.
+                        </p>
+                        <p>
+                            This extensive experience spans multiple continents and encompasses all aspects 
+                            of rail and commercial vehicle manufacturing, engineering, and project management.
+                        </p>
+                    </div>
+                </div>
+                
+                <div data-scroll data-scroll-animation="fade-right">
+                    <h3>Career Beginnings</h3>
+                    <p>
+                        <strong>Downer Group, Australia</strong>
+                    </p>
+                    <p>
+                        Starting with Downer Group in Australia, our founder has built strong industry 
+                        connections that enhance our consultancy capabilities and credibility.
+                    </p>
+                    <p>
+                        These foundational years with one of Australia's leading engineering and infrastructure 
+                        companies provided invaluable experience and established relationships that continue 
+                        to benefit Transmac Consult and our clients today.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section" data-scroll-section>
+        <div class="container">
+            <h2 data-scroll>International Experience</h2>
+            
+            <div data-scroll data-scroll-animation="scale-up">
+                <h3>Global Perspective</h3>
+                <p>
+                    With a proven record of delivering products, projects, and services internationally, 
+                    our leadership team emphasizes credibility and a global perspective in our operations.
+                </p>
+                
+                <h3 style="margin-top: 3rem; margin-bottom: 2rem;">Key Achievements & Expertise</h3>
+                <div class="process-stages">
+                    <div class="stage" data-scroll data-scroll-animation="fade-up">
+                        <div class="stage-number">1</div>
+                        <div class="stage-content">
+                            <h4>Global Project Delivery</h4>
+                            <p>Successfully delivered rail vehicle projects across Australia, Malaysia, India, and Brazil</p>
+                        </div>
+                    </div>
+                    <div class="stage" data-scroll data-scroll-animation="fade-up">
+                        <div class="stage-number">2</div>
+                        <div class="stage-content">
+                            <h4>Manufacturing Leadership</h4>
+                            <p>Led commercial vehicle manufacturing operations for major international brands</p>
+                        </div>
+                    </div>
+                    <div class="stage" data-scroll data-scroll-animation="fade-up">
+                        <div class="stage-number">3</div>
+                        <div class="stage-content">
+                            <h4>Facility Establishment</h4>
+                            <p>Established manufacturing facilities and supply chain networks in multiple countries</p>
+                        </div>
+                    </div>
+                    <div class="stage" data-scroll data-scroll-animation="fade-up">
+                        <div class="stage-number">4</div>
+                        <div class="stage-content">
+                            <h4>Innovation & IP Development</h4>
+                            <p>Developed and registered intellectual property and patents for rail vehicle technology</p>
+                        </div>
+                    </div>
+                    <div class="stage" data-scroll data-scroll-animation="fade-up">
+                        <div class="stage-number">5</div>
+                        <div class="stage-content">
+                            <h4>Strategic Partnerships</h4>
+                            <p>Built strategic partnerships with leading international rail and vehicle manufacturers</p>
+                        </div>
+                    </div>
+                    <div class="stage" data-scroll data-scroll-animation="fade-up">
+                        <div class="stage-number">6</div>
+                        <div class="stage-content">
+                            <h4>Comprehensive Expertise</h4>
+                            <p>Expertise in project management, business development, and engineering solutions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_Footer")
+</div>
+
+@await Html.PartialAsync("_ContactButton")
+@await Html.PartialAsync("_LocomotiveScrollScript")

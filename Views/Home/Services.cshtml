@@ -1,0 +1,150 @@
+@{
+    ViewData["Title"] = "Core Services";
+}
+
+@await Html.PartialAsync("_LocomotiveScrollStyles")
+
+<div data-scroll-container>
+    <div class="hero-section" data-scroll-section style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/services.jpg'); background-size: cover; background-position: center; background-attachment: fixed; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="container">
+            <h1 data-scroll style="color: white;">Core Services</h1>
+            <p data-scroll style="color: white;">Comprehensive Consulting & Engineering Solutions</p>
+        </div>
+    </div>
+
+    <div class="content-section" data-scroll-section>
+        <div class="container">
+            <h2 data-scroll>Our Service Portfolio</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem;" data-scroll data-scroll-animation="fade-up">
+                Transmac Consult offers a comprehensive range of consulting and engineering services 
+                tailored to meet the diverse needs of our clients in the transportation and infrastructure sectors.
+            </p>
+
+            <div class="grid-3">
+                <div class="card" data-scroll>
+                    <h3>Rail Systems Consulting</h3>
+                    <p>
+                        Expert consulting services for rail infrastructure projects, including system design, 
+                        project management, safety assessments, and regulatory compliance.
+                    </p>
+                    <ul>
+                        <li>Rail system design and planning</li>
+                        <li>Safety and risk assessment</li>
+                        <li>Project management</li>
+                        <li>Regulatory compliance</li>
+                    </ul>
+                </div>
+
+                <div class="card" data-scroll>
+                    <h3>Commercial Vehicle Engineering</h3>
+                    <p>
+                        Specialized engineering services for commercial vehicle projects, including design 
+                        optimization, testing, compliance, and fleet management solutions.
+                    </p>
+                    <ul>
+                        <li>Vehicle design and optimization</li>
+                        <li>Testing and validation</li>
+                        <li>Compliance certification</li>
+                        <li>Fleet management consulting</li>
+                    </ul>
+                </div>
+
+                <div class="card" data-scroll>
+                    <h3>Infrastructure Engineering</h3>
+                    <p>
+                        Comprehensive infrastructure engineering services covering planning, design, 
+                        construction management, and asset lifecycle management.
+                    </p>
+                    <ul>
+                        <li>Infrastructure planning</li>
+                        <li>Engineering design</li>
+                        <li>Construction management</li>
+                        <li>Asset management</li>
+                    </ul>
+                </div>
+
+                <div class="card" data-scroll>
+                    <h3>Project Management</h3>
+                    <p>
+                        End-to-end project management services ensuring on-time, on-budget delivery 
+                        with quality assurance and stakeholder satisfaction.
+                    </p>
+                    <ul>
+                        <li>Project planning and scheduling</li>
+                        <li>Risk management</li>
+                        <li>Quality assurance</li>
+                        <li>Stakeholder management</li>
+                    </ul>
+                </div>
+
+                <div class="card" data-scroll>
+                    <h3>Technical Advisory</h3>
+                    <p>
+                        Strategic technical advisory services to support decision-making, feasibility 
+                        studies, and technology selection for complex projects.
+                    </p>
+                    <ul>
+                        <li>Feasibility studies</li>
+                        <li>Technology assessment</li>
+                        <li>Due diligence</li>
+                        <li>Strategic planning</li>
+                    </ul>
+                </div>
+
+                <div class="card" data-scroll>
+                    <h3>Business Support Services</h3>
+                    <p>
+                        Comprehensive business support including strategic consulting, operational 
+                        improvement, and organizational development.
+                    </p>
+                    <ul>
+                        <li>Business strategy consulting</li>
+                        <li>Process optimization</li>
+                        <li>Organizational development</li>
+                        <li>Change management</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section" data-scroll-section>
+        <div class="container">
+            <h2 data-scroll>Why Our Services Stand Out</h2>
+            <div class="grid-2">
+                <div class="card" data-scroll data-scroll-animation="fade-left">
+                    <h3>Integrated Approach</h3>
+                    <p>
+                        We provide end-to-end solutions that integrate consulting, engineering, and 
+                        project management for seamless delivery.
+                    </p>
+                </div>
+                <div class="card" data-scroll data-scroll-animation="fade-right">
+                    <h3>Industry Expertise</h3>
+                    <p>
+                        Our team brings deep domain knowledge in rail systems, commercial vehicles, 
+                        and infrastructure development.
+                    </p>
+                </div>
+                <div class="card" data-scroll data-scroll-animation="fade-left">
+                    <h3>Client-Centric</h3>
+                    <p>
+                        We tailor our services to meet specific client needs and deliver measurable value.
+                    </p>
+                </div>
+                <div class="card" data-scroll data-scroll-animation="fade-right">
+                    <h3>Quality Assurance</h3>
+                    <p>
+                        We maintain rigorous quality standards and follow international best practices 
+                        in all our deliverables.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_Footer")
+</div>
+
+@await Html.PartialAsync("_ContactButton")
+@await Html.PartialAsync("_LocomotiveScrollScript")

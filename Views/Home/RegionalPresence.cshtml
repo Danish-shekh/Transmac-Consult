@@ -1,0 +1,264 @@
+@{
+    ViewData["Title"] = "Regional Presence";
+}
+
+@await Html.PartialAsync("_LocomotiveScrollStyles")
+
+<div data-scroll-container>
+    <div class="hero-section" data-scroll-section style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/regional%20presence.jpg'); background-size: cover; background-position: center; background-attachment: fixed; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="container">
+            <h1 data-scroll style="color: white;">Regional Presence</h1>
+            <p data-scroll style="color: white;">Your Tailored Solutions Partner Across Asia and Beyond</p>
+        </div>
+    </div>
+
+    <!-- Interactive Global Map Section -->
+    <div class="global-reach-section" data-scroll-section>
+        <div class="container">
+            <div class="section-header" data-scroll data-scroll-animation="fade-up">
+                <h2>Our Global Reach</h2>
+                <p>Strategic offices in Singapore and Malaysia, with partnerships and project delivery across multiple continents</p>
+            </div>
+
+            <!-- Map Legend -->
+            <div class="map-legend" data-scroll data-scroll-animation="fade-up">
+                <div class="map-legend-item" data-type="office">
+                    <span class="legend-marker office-marker"></span>
+                    <span class="legend-text">Offices</span>
+                </div>
+                <div class="map-legend-item" data-type="partnership">
+                    <span class="legend-marker partnership-marker"></span>
+                    <span class="legend-text">Partnerships</span>
+                </div>
+                <div class="map-legend-item" data-type="project">
+                    <span class="legend-marker project-marker"></span>
+                    <span class="legend-text">Project Reach</span>
+                </div>
+            </div>
+
+            <!-- Interactive Map Container -->
+            <div class="global-map-wrapper" data-scroll data-scroll-animation="scale-up">
+                <div class="global-map-container">
+                    <!-- World Map Background Image -->
+                    <div class="world-map-background"></div>
+                    
+                    <!-- Headquarters - Singapore (RED) - More centered in SE Asia -->
+                    <div class="map-marker map-marker-office headquarters" style="left: 76%; top: 57%;">
+                        <div class="marker-pulse"></div>
+                        <div class="marker-pin">
+                            <svg width="32" height="32" viewBox="0 0 32 32">
+                                <circle cx="16" cy="16" r="9" fill="#dc2626" stroke="white" stroke-width="2.5"/>
+                                <circle cx="16" cy="16" r="4" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="marker-label permanent-label">Singapore</div>
+                    </div>
+
+                    <!-- Office - Malaysia (RED) - Northwest of Singapore -->
+                    <div class="map-marker map-marker-office" style="left: 74%; top: 54%;">
+                        <div class="marker-pulse"></div>
+                        <div class="marker-pin">
+                            <svg width="28" height="28" viewBox="0 0 28 28">
+                                <circle cx="14" cy="14" r="8" fill="#dc2626" stroke="white" stroke-width="2.5"/>
+                                <circle cx="14" cy="14" r="3" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="marker-label permanent-label">Malaysia</div>
+                    </div>
+
+                    <!-- Partnership - China (BLUE) - Eastern China -->
+                    <div class="map-marker map-marker-partnership" style="left: 78%; top: 38%;">
+                        <div class="marker-pulse"></div>
+                        <div class="marker-pin">
+                            <svg width="26" height="26" viewBox="0 0 26 26">
+                                <circle cx="13" cy="13" r="7" fill="#2563eb" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="marker-label permanent-label">China</div>
+                    </div>
+
+                    <!-- Partnership - Thailand (BLUE) - North of Malaysia -->
+                    <div class="map-marker map-marker-partnership" style="left: 72%; top: 48%;">
+                        <div class="marker-pulse"></div>
+                        <div class="marker-pin">
+                            <svg width="26" height="26" viewBox="0 0 26 26">
+                                <circle cx="13" cy="13" r="7" fill="#2563eb" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="marker-label permanent-label">Thailand</div>
+                    </div>
+
+                    <!-- Partnership - India (GREEN) - Subcontinent -->
+                    <div class="map-marker map-marker-project" style="left: 65%; top: 46%;">
+                        <div class="marker-pulse"></div>
+                        <div class="marker-pin">
+                            <svg width="26" height="26" viewBox="0 0 26 26">
+                                <circle cx="13" cy="13" r="7" fill="#16a34a" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="marker-label permanent-label">India</div>
+                    </div>
+
+                    <!-- Partnership - Australia (GREEN) - Oceania -->
+                    <div class="map-marker map-marker-project" style="left: 83%; top: 76%;">
+                        <div class="marker-pulse"></div>
+                        <div class="marker-pin">
+                            <svg width="26" height="26" viewBox="0 0 26 26">
+                                <circle cx="13" cy="13" r="7" fill="#16a34a" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="marker-label permanent-label">Australia</div>
+                    </div>
+
+                    <!-- Project Reach - Brazil (GREEN) - South America -->
+                    <div class="map-marker map-marker-project" style="left: 30%; top: 65%;">
+                        <div class="marker-pulse"></div>
+                        <div class="marker-pin">
+                            <svg width="26" height="26" viewBox="0 0 26 26">
+                                <circle cx="13" cy="13" r="7" fill="#16a34a" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="marker-label permanent-label">Brazil</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TMC Logo Watermark -->
+            <div class="map-logo-watermark">
+                <img src="~/images/TMC-logo.png" alt="TMC Logo" />
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section offices-section" data-scroll-section>
+        <div class="container">
+            <h2 data-scroll>Our Offices</h2>
+            
+            <div class="grid-2">
+                <div class="card" data-scroll data-scroll-animation="fade-left">
+                    <h3>Singapore Office</h3>
+                    <p><strong>Headquarters</strong></p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Address:</strong></p>
+                    <p>1 Leicester Road #06-11<br />Singapore 358828</p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Contact Information:</strong></p>
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li><strong>Phone:</strong> +6017 3663 819</li>
+                        <li><strong>Email:</strong> mark@transmacconsult.com</li>
+                    </ul>
+
+                    <p style="margin-top: 1.5rem;">
+                        Founded in 2021, our Singapore headquarters serves as the central hub for our operations across Asia-Pacific. 
+                        We provide comprehensive consultancy services in project management, business management, and engineering solutions 
+                        for the rail and commercial vehicle industries.
+                    </p>
+                </div>
+
+                <div class="card" data-scroll data-scroll-animation="fade-right">
+                    <h3>Malaysia Office</h3>
+                    <p><strong>Regional Office</strong></p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Address:</strong></p>
+                    <p>9-2 Jalan Wangsa Delima 2A<br />
+                       Seksyen 5 Wangsa Maju<br />
+                       Kuala Lumpur 53300</p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Contact Information:</strong></p>
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li><strong>Phone:</strong> +6017 3663 819</li>
+                        <li><strong>Email:</strong> mark@transmacconsult.com</li>
+                    </ul>
+
+                    <p style="margin-top: 1.5rem;">
+                        Expanded in 2024, our Malaysia office demonstrates our growth trajectory and regional commitment. 
+                        This strategic location enables us to better serve our Malaysian clients and strengthen our presence 
+                        in Southeast Asia's growing rail and commercial vehicle markets.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section contact-section" id="contact-section" data-scroll-section>
+        <div class="container">
+            <h2 data-scroll>Get in Touch</h2>
+            
+            <div class="grid-2">
+                <div class="card contact-card" data-scroll data-scroll-animation="fade-left">
+                    <h3>Singapore Office (HQ)</h3>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Address:</strong></p>
+                    <p>1 Leicester Road #06-11<br />Singapore 358828</p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Contact Information:</strong></p>
+                    <ul style="list-style: none; margin-left: 0; padding-left: 0;">
+                        <li style="margin-bottom: 0.5rem;"><strong>Phone:</strong> +6017 3663 819</li>
+                        <li><strong>Email:</strong> <a href="mailto:mark@transmacconsult.com" style="color: #2563eb; text-decoration: none;">mark@transmacconsult.com</a></li>
+                    </ul>
+                </div>
+
+                <div class="card contact-card" data-scroll data-scroll-animation="fade-right">
+                    <h3>Malaysia Office</h3>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Address:</strong></p>
+                    <p>9-2 Jalan Wangsa Delima 2A<br />
+                       Seksyen 5 Wangsa Maju<br />
+                       Kuala Lumpur 53300</p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Contact Information:</strong></p>
+                    <ul style="list-style: none; margin-left: 0; padding-left: 0;">
+                        <li><strong>Phone:</strong> +6017 3663 819</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section location-benefits-section" data-scroll-section>
+        <div class="container">
+            <h2 data-scroll>Why Our Location Matters</h2>
+            
+            <div class="grid-2">
+                <div class="card" data-scroll>
+                    <h3>Strategic Hub</h3>
+                    <p>
+                        Our Singapore headquarters positions us at the heart of Asia's transportation 
+                        and infrastructure development, providing easy access to major markets and projects 
+                        across the region.
+                    </p>
+                </div>
+
+                <div class="card" data-scroll>
+                    <h3>Regional Expertise</h3>
+                    <p>
+                        Our Malaysia office enables us to serve the ASEAN market effectively, with deep 
+                        understanding of regional requirements, regulations, and business practices.
+                    </p>
+                </div>
+
+                <div class="card" data-scroll>
+                    <h3>Global Standards</h3>
+                    <p>
+                        Operating from world-class business environments, we maintain international 
+                        standards while delivering locally relevant solutions.
+                    </p>
+                </div>
+
+                <div class="card" data-scroll>
+                    <h3>Accessibility</h3>
+                    <p>
+                        Our strategic locations ensure easy accessibility for clients and enable rapid 
+                        deployment of our teams to project sites across the region.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_Footer")
+</div>
+
+@await Html.PartialAsync("_ContactButton")
+@await Html.PartialAsync("_LocomotiveScrollScript")

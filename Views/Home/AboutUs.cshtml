@@ -1,0 +1,96 @@
+@{
+    ViewData["Title"] = "About Us";
+}
+
+@await Html.PartialAsync("_LocomotiveScrollStyles")
+
+<div data-scroll-container>
+    <div class="hero-section" data-scroll-section style="min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; z-index: 5;">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;">
+            <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover; opacity: 1;">
+                <source src="/css/videos/cenimatic engineering.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)); pointer-events: none;"></div>
+        </div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <h1 data-scroll style="color: white;">Transmac Consult</h1>
+            <p data-scroll style="color: white;">Your Tailored Solutions Partner Since 2021</p>
+        </div>
+    </div>
+
+    <div class="content-section" data-scroll-section style="position: relative; z-index: 10; background-color: white;">
+        <div class="container">
+            <h2 data-scroll>Company Overview</h2>
+            
+            <div class="grid-2">
+                <div data-scroll data-scroll-animation="fade-left">
+                    <h3>01 - Company Overview</h3>
+                    <p>
+                        Transmac Consult specialises in providing consultancy services across project management, 
+                        business management, manufacturing and engineering services, specifically tailored for the 
+                        rail and commercial vehicle industries.
+                    </p>
+                    <p>
+                        Our team of experienced professionals brings together decades of expertise in engineering, 
+                        project management, and strategic consulting. We are committed to delivering excellence 
+                        and value to our clients through innovative approaches and proven methodologies.
+                    </p>
+                </div>
+                
+                <div data-scroll data-scroll-animation="fade-right">
+                    <h3>02 - Founding and Growth</h3>
+                    <p>
+                        <strong>Founded 2021 (Singapore)</strong><br />
+                        <strong>Expanded 2024 (Malaysia)</strong>
+                    </p>
+                    <p>
+                        Established in 2021 in Singapore, Transmac Consult has rapidly expanded its footprint to 
+                        Malaysia by 2024, demonstrating our growth trajectory and regional influence and commitment.
+                    </p>
+                    <p>
+                        Our strategic expansion reflects our commitment to serving clients across Southeast Asia 
+                        with localized expertise and international standards.
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;" data-scroll data-scroll-animation="fade-up">
+                <h3>03 - Commitment to Excellence</h3>
+                <p style="max-width: 900px; margin: 0 auto;">
+                    Our unwavering commitment to excellence in service delivery and client satisfaction is at the 
+                    core of our operations, ensuring that we meet and exceed client expectations. We believe in 
+                    building long-term relationships based on trust, transparency, and consistently delivering 
+                    exceptional results.
+                </p>
+            </div>
+
+            <h3 style="margin-top: 3rem;" data-scroll>Why Choose Transmac Consult?</h3>
+            <div class="grid-3">
+                <div class="card" data-scroll>
+                    <h3>Industry Expertise</h3>
+                    <p>
+                        Over 30 years of combined experience in rail systems, commercial vehicles, and engineering consulting.
+                    </p>
+                </div>
+                <div class="card" data-scroll>
+                    <h3>Regional Presence</h3>
+                    <p>
+                        Strategic offices in Singapore and Malaysia with international project reach across Asia and beyond.
+                    </p>
+                </div>
+                <div class="card" data-scroll>
+                    <h3>Tailored Solutions</h3>
+                    <p>
+                        Custom-designed solutions that integrate seamlessly with client operations and existing resources.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_Footer")
+</div>
+
+@await Html.PartialAsync("_ContactButton")
+@await Html.PartialAsync("_LocomotiveScrollScript")

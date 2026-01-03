@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Transmac Consult</title>
+    <link rel="icon" type="image/png" href="~/images/TMC-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        /* ===================================
+           GLASSY MODERN HEADER
+        =================================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, 
+                rgba(59, 130, 246, 0.03) 0%, 
+                rgba(168, 85, 247, 0.03) 100%);
+            pointer-events: none;
+        }
+        
+        .navbar {
+            padding: 0;
+        }
+        
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0.5rem 1rem 0.5rem;
+            position: relative;
+            max-width: 100%;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 2;
+        }
+        
+        .logo-image {
+            height: 45px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-image:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #000000;
+            text-decoration: none;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+        
+        .logo:hover {
+            color: #3b82f6;
+        }
+        
+        .navbar-menu {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+        
+        .navbar-menu li {
+            margin: 0;
+        }
+        
+        .navbar-menu a {
+            display: block;
+            padding: 0.625rem 1.25rem;
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+        
+        .navbar-menu a::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .navbar-menu a:hover {
+            color: #1d1d1f;
+            transform: translateY(-2px);
+        }
+        
+        .navbar-menu a:hover::before {
+            opacity: 1;
+        }
+        
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 2;
+        }
+        
+        .navbar-toggle span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background: #1d1d1f;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Mobile Responsive */
+        @@media (max-width: 1024px) {
+            .navbar-menu {
+                gap: 0.25rem;
+            }
+            
+            .navbar-menu a {
+                padding: 0.5rem 0.875rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @@media (max-width: 768px) {
+            .navbar .container {
+                padding: 0.875rem 1.5rem;
+            }
+            
+            .logo-image {
+                height: 38px;
+            }
+            
+            .logo {
+                font-size: 1rem;
+            }
+            
+            .navbar-toggle {
+                display: flex;
+            }
+            
+            .navbar-menu {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(30px) saturate(180%);
+                -webkit-backdrop-filter: blur(30px) saturate(180%);
+                padding: 1.5rem;
+                gap: 0.5rem;
+                transform: translateY(-120%);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            }
+            
+            .navbar-menu.active {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .navbar-menu a {
+                width: 100%;
+                text-align: center;
+                padding: 0.875rem 1.25rem;
+            }
+            
+            .navbar-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translateY(7px);
+            }
+            
+            .navbar-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .navbar-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translateY(-7px);
+            }
+        }
+        
+        /* Add padding to body to account for fixed header */
+        body {
+            padding-top: 75px;
+        }
+        
+        /* Floating Triangles - Within Content - Bold & Colorful Style */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .triangle {
+            position: absolute;
+            left: var(--x);
+            top: var(--y);
+            width: 0;
+            height: 0;
+            border-left: calc(var(--size) * 0.6) solid transparent;
+            border-right: calc(var(--size) * 0.6) solid transparent;
+            border-bottom: var(--size) solid var(--color);
+            transform: rotate(var(--rotate, 0deg));
+            opacity: 1;
+            animation: triangleFloat var(--dur) ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+
+        /* Upside-down triangles */
+        .triangle.inverted {
+            border-bottom: none;
+            border-top: var(--size) solid var(--color);
+        }
+
+        @@keyframes triangleFloat {
+            0% { 
+                transform: rotate(var(--rotate, 0deg)) translateY(0) translateX(0) scale(1); 
+                opacity: 0.7;
+            }
+            20% { 
+                transform: rotate(calc(var(--rotate, 0deg) + 15deg)) translateY(-30px) translateX(25px) scale(1.15); 
+                opacity: 0.85;
+            }
+            40% { 
+                transform: rotate(calc(var(--rotate, 0deg) - 10deg)) translateY(-40px) translateX(-20px) scale(0.9); 
+                opacity: 0.75;
+            }
+            60% { 
+                transform: rotate(calc(var(--rotate, 0deg) + 20deg)) translateY(18px) translateX(35px) scale(1.1); 
+                opacity: 0.8;
+            }
+            80% { 
+                transform: rotate(calc(var(--rotate, 0deg) - 12deg)) translateY(35px) translateX(-15px) scale(0.95); 
+                opacity: 0.78;
+            }
+            100% { 
+                transform: rotate(var(--rotate, 0deg)) translateY(0) translateX(0) scale(1); 
+                opacity: 0.7;
+            }
+        }
+
+        /* Color palette matching the reference image */
+        :root {
+            --tri-teal: #3DD1C8;
+            --tri-cyan: #40E0D0;
+            --tri-red: #E63946;
+            --tri-coral: #FF6B6B;
+            --tri-maroon: #5D1A38;
+            --tri-purple: #4A1942;
+            --tri-dark-purple: #2D0A2E;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a asp-controller="Home" asp-action="AboutUs">
+                        <img src="~/images/TMC-logo.png" alt="TMC Logo" class="logo-image" onerror="this.style.display='none'" />
+                    </a>
+                    <a asp-controller="Home" asp-action="AboutUs" class="logo">TRANSMAC CONSULT</a>
+                </div>
+                <button class="navbar-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="navbar-menu" id="navMenu">
+                    <li><a asp-controller="Home" asp-action="AboutUs">About Us</a></li>
+                    <li><a asp-controller="Home" asp-action="VisionMission">Vision & Mission</a></li>
+                    <li><a asp-controller="Home" asp-action="Leadership">Leadership</a></li>
+                    <li><a asp-controller="Home" asp-action="Services">Services</a></li>
+                    <li><a asp-controller="Home" asp-action="Projects">Projects</a></li>
+                    <li><a asp-controller="Home" asp-action="RegionalPresence">Regional Presence</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" style="position: relative; background: white;">
+        <!-- FLOATING TRIANGLES - Within Content - 10 Triangles (1/3 size) -->
+        <div class="floating-shapes">
+            <!-- Teal/Cyan triangles -->
+            <div class="triangle" style="--x:8%; --y:12%; --size:65px; --color:#3DD1C8; --rotate:15deg; --delay:0s; --dur:20s;"></div>
+            <div class="triangle inverted" style="--x:88%; --y:8%; --size:60px; --color:#40E0D0; --rotate:-25deg; --delay:2s; --dur:24s;"></div>
+            <div class="triangle" style="--x:45%; --y:25%; --size:55px; --color:#3DD1C8; --rotate:35deg; --delay:8s; --dur:22s;"></div>
+            
+            <!-- Red/Coral triangles -->
+            <div class="triangle" style="--x:15%; --y:45%; --size:50px; --color:#E63946; --rotate:-15deg; --delay:3s; --dur:18s;"></div>
+            <div class="triangle inverted" style="--x:78%; --y:58%; --size:57px; --color:#FF6B6B; --rotate:20deg; --delay:5s; --dur:21s;"></div>
+            <div class="triangle" style="--x:30%; --y:70%; --size:53px; --color:#E63946; --rotate:-30deg; --delay:10s; --dur:19s;"></div>
+            
+            <!-- Dark Purple/Maroon triangles -->
+            <div class="triangle inverted" style="--x:25%; --y:18%; --size:47px; --color:#5D1A38; --rotate:-8deg; --delay:1s; --dur:23s;"></div>
+            <div class="triangle" style="--x:62%; --y:38%; --size:43px; --color:#4A1942; --rotate:42deg; --delay:6s; --dur:17s;"></div>
+            <div class="triangle inverted" style="--x:50%; --y:65%; --size:53px; --color:#2D0A2E; --rotate:18deg; --delay:4s; --dur:25s;"></div>
+            <div class="triangle" style="--x:92%; --y:78%; --size:48px; --color:#5D1A38; --rotate:-20deg; --delay:7s; --dur:20s;"></div>
+        </div>
+        
+        @RenderBody()
+    </main>
+
+    <footer style="position: relative; z-index: 5; border-top: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.08);" id="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Transmac Consult</h3>
+                    <p>Your Tailored Solutions Partner</p>
+                    <p style="margin-top: 1rem;">Professional Consulting & Engineering Services</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Singapore Office (HQ)</h4>
+                    <p>1 Leicester Road #06-11<br />Singapore 358828</p>
+                    <p style="margin-top: 0.5rem;">
+                        <strong>Phone:</strong> +6017 3663 819<br />
+                        <strong>Email:</strong> <a href="mailto:mark@transmacconsult.com" style="color: #ffc107; text-decoration: none;">mark@transmacconsult.com</a>
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4>Malaysia Office</h4>
+                    <p>9-2 Jalan Wangsa Delima 2A<br />Seksyen 5 Wangsa Maju<br />Kuala Lumpur 53300</p>
+                    <p style="margin-top: 0.5rem;"><strong>Phone:</strong> +6017 3663 819</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; @DateTime.Now.Year - Transmac Consult. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/global-map.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100,
+            delay: 50
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

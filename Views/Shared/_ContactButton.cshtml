@@ -1,0 +1,364 @@
+@* Shared floating Get In Touch button with popup *@
+<style>
+    /* Floating Contact Bar - Glassmorphic Design */
+    .floating-contact-bar {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 16px 32px;
+        /* Glassmorphism styling */
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(30px) saturate(180%);
+        -webkit-backdrop-filter: blur(30px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 100px;
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.15),
+            0 2px 8px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        animation: floatIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.5s both;
+    }
+
+    @@keyframes floatIn {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+
+    .floating-contact-bar::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 100px;
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.15) 0%, 
+            rgba(255, 255, 255, 0.05) 100%);
+        pointer-events: none;
+    }
+
+    .contact-bar-text {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #1d1d1f;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+    }
+
+    .contact-bar-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 28px;
+        background: linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%);
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border-radius: 50px;
+        letter-spacing: 0.02em;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 
+            0 4px 12px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        border: none;
+    }
+
+    .contact-bar-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.15) 0%, 
+            rgba(255, 255, 255, 0) 50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .contact-bar-btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 
+            0 8px 24px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        background: linear-gradient(135deg, #2d2d2f 0%, #3d3d3f 100%);
+    }
+
+    .contact-bar-btn:hover::before {
+        opacity: 1;
+    }
+
+    .contact-bar-btn svg {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.3s ease;
+    }
+
+    .contact-bar-btn:hover svg {
+        transform: translateX(3px);
+    }
+
+    /* Contact Popup Overlay */
+    .contact-popup-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .contact-popup-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Contact Popup */
+    .contact-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        z-index: 2001;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(30px) saturate(180%);
+        -webkit-backdrop-filter: blur(30px) saturate(180%);
+        border-radius: 24px;
+        padding: 40px 50px;
+        box-shadow: 
+            0 25px 80px rgba(0, 0, 0, 0.25),
+            0 10px 30px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        text-align: center;
+        min-width: 320px;
+    }
+    
+    .contact-popup.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .contact-popup-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        background: rgba(0, 0, 0, 0.05);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        font-size: 20px;
+        color: #666;
+    }
+    
+    .contact-popup-close:hover {
+        background: rgba(0, 0, 0, 0.1);
+        transform: rotate(90deg);
+    }
+
+    .contact-popup h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1d1d1f;
+        margin-bottom: 0.5rem;
+    }
+
+    .contact-popup p {
+        font-size: 0.95rem;
+        color: #6b7280;
+        margin-bottom: 2rem;
+    }
+
+    .contact-options {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+    }
+
+    .contact-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 24px 32px;
+        background: #fff;
+        border-radius: 16px;
+        text-decoration: none;
+        border: 2px solid rgba(0, 0, 0, 0.08);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        min-width: 130px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-option:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        border-color: transparent;
+    }
+
+    .contact-option.whatsapp:hover {
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    }
+    
+    .contact-option.whatsapp:hover .contact-option-icon,
+    .contact-option.whatsapp:hover .contact-option-text {
+        color: #fff;
+    }
+
+    .contact-option.email:hover {
+        background: linear-gradient(135deg, #EA4335 0%, #C5221F 100%);
+    }
+    
+    .contact-option.email:hover .contact-option-icon,
+    .contact-option.email:hover .contact-option-text {
+        color: #fff;
+    }
+
+    .contact-option-icon {
+        font-size: 2.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .contact-option-text {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1d1d1f;
+        transition: color 0.3s ease;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .floating-contact-bar {
+            padding: 14px 24px;
+            gap: 14px;
+            bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90%;
+        }
+        
+        .contact-bar-text {
+            font-size: 0.85rem;
+        }
+        
+        .contact-bar-btn {
+            padding: 10px 22px;
+            font-size: 0.85rem;
+        }
+        
+        .contact-popup {
+            padding: 30px 25px;
+            min-width: 280px;
+            max-width: 90%;
+        }
+        
+        .contact-options {
+            flex-direction: column;
+        }
+        
+        .contact-option {
+            padding: 20px 24px;
+            flex-direction: row;
+            justify-content: center;
+        }
+    }
+    
+    @@media (max-width: 480px) {
+        .floating-contact-bar {
+            flex-direction: column;
+            gap: 12px;
+            border-radius: 24px;
+            padding: 18px 24px;
+        }
+        
+        .contact-bar-text {
+            text-align: center;
+        }
+    }
+</style>
+
+<!-- Popup Overlay -->
+<div class="contact-popup-overlay" id="contactPopupOverlay"></div>
+
+<!-- Contact Popup -->
+<div class="contact-popup" id="contactPopup">
+    <button class="contact-popup-close" id="contactPopupClose">&times;</button>
+    <h3>Get In Touch</h3>
+    <p>Choose how you'd like to contact us</p>
+    <div class="contact-options">
+        <a href="https://wa.me/60173663819" class="contact-option whatsapp" target="_blank">
+            <span class="contact-option-icon">💬</span>
+            <span class="contact-option-text">WhatsApp</span>
+        </a>
+        <a href="mailto:mark@transmacconsult.com" class="contact-option email">
+            <span class="contact-option-icon">✉️</span>
+            <span class="contact-option-text">Email</span>
+        </a>
+    </div>
+</div>
+
+<!-- Floating Contact Bar -->
+<div class="floating-contact-bar">
+    <span class="contact-bar-text">Ready to transform your next project?</span>
+    <button class="contact-bar-btn" id="openContactPopup">
+        Get In Touch
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+    </button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const openBtn = document.getElementById('openContactPopup');
+        const popup = document.getElementById('contactPopup');
+        const overlay = document.getElementById('contactPopupOverlay');
+        const closeBtn = document.getElementById('contactPopupClose');
+        
+        function openPopup() {
+            popup.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closePopup() {
+            popup.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        if (openBtn) openBtn.addEventListener('click', openPopup);
+        if (closeBtn) closeBtn.addEventListener('click', closePopup);
+        if (overlay) overlay.addEventListener('click', closePopup);
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closePopup();
+        });
+    });
+</script>

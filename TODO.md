@@ -1,0 +1,4 @@
+- [x] Add CSS for .special-free-grid in Projects.cshtml
+- [x] Add class "np-commercial" to commercial section
+- [x] Replace placeholder with special-free-grid div and foreach loop for images
+- [x] Test the page to ensure collage displays correctly

@@ -1,0 +1,31 @@
+<svg width="200" height="80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1a3a5c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffc107;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff9800;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background rectangle with rounded corners -->
+  <rect x="0" y="0" width="200" height="80" rx="10" fill="white" opacity="0.1"/>
+  
+  <!-- Modern train/transport icon -->
+  <g transform="translate(20, 25)">
+    <!-- Train body -->
+    <path d="M 0 10 L 30 0 L 60 10 L 60 30 L 0 30 Z" fill="url(#grad2)" opacity="0.9"/>
+    <!-- Train detail line -->
+    <path d="M 5 15 L 25 7 L 55 15" stroke="#1a3a5c" stroke-width="2" fill="none"/>
+    <!-- Motion lines -->
+    <line x1="-5" y1="12" x2="-15" y2="12" stroke="url(#grad2)" stroke-width="2" opacity="0.6"/>
+    <line x1="-5" y1="18" x2="-12" y2="18" stroke="url(#grad2)" stroke-width="2" opacity="0.4"/>
+  </g>
+  
+  <!-- TMC Text -->
+  <text x="95" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">TMC</text>
+  <text x="95" y="55" font-family="Arial, sans-serif" font-size="10" fill="#ffc107" letter-spacing="2">TRANSMAC</text>
+</svg>

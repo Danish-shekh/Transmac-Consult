@@ -1,0 +1,126 @@
+@* Footer partial for pages with Locomotive Scroll - Glassy Modern Design *@
+<style>
+    /* Glassy Modern Footer Design */
+    footer[data-scroll-section] {
+        position: relative;
+        margin-top: 0;
+        padding: 60px 0 30px;
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(248, 250, 252, 0.98) 100%);
+        backdrop-filter: blur(30px) saturate(180%);
+        -webkit-backdrop-filter: blur(30px) saturate(180%);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.1), 0 -1px 3px rgba(0, 0, 0, 0.06);
+    }
+    
+    footer[data-scroll-section]::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: 
+            radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+            radial-gradient(circle at 70% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
+        pointer-events: none;
+    }
+    
+    footer[data-scroll-section] .container {
+        position: relative;
+        z-index: 2;
+    }
+    
+    footer[data-scroll-section] .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+        margin-bottom: 2.5rem;
+    }
+    
+    footer[data-scroll-section] .footer-section h3,
+    footer[data-scroll-section] .footer-section h4 {
+        color: #000000;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        letter-spacing: -0.01em;
+    }
+    
+    footer[data-scroll-section] .footer-section p,
+    footer[data-scroll-section] .footer-section a {
+        color: #000000;
+        line-height: 1.7;
+        font-size: 0.95rem;
+    }
+    
+    footer[data-scroll-section] .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    footer[data-scroll-section] .footer-logo img {
+        height: 50px;
+        width: auto;
+    }
+    
+    footer[data-scroll-section] .footer-section a {
+        color: #3b82f6;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    footer[data-scroll-section] .footer-section a:hover {
+        color: #2563eb;
+    }
+    
+    footer[data-scroll-section] .footer-bottom {
+        padding-top: 2rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        text-align: center;
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+    
+    @@media (max-width: 768px) {
+        footer[data-scroll-section] {
+            padding: 50px 0 25px;
+            margin-top: 0;
+        }
+        
+        footer[data-scroll-section] .footer-content {
+            gap: 2rem;
+        }
+    }
+</style>
+
+<footer style="position: relative; z-index: 5;" data-scroll-section>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <img src="~/images/TMC-logo.png" alt="TMC Logo" onerror="this.style.display='none'" />
+                </div>
+                <h3>Transmac Consult</h3>
+                <p>Your Tailored Solutions Partner</p>
+                <p style="margin-top: 1rem;">Professional Consulting & Engineering Services</p>
+            </div>
+            <div class="footer-section">
+                <h4>Singapore Office (HQ)</h4>
+                <p>1 Leicester Road #06-11<br />Singapore 358828</p>
+                <p style="margin-top: 0.5rem;">
+                    <strong>Phone:</strong> +6017 3663 819<br />
+                    <strong>Email:</strong> <a href="mailto:mark@transmacconsult.com">mark@transmacconsult.com</a>
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>Malaysia Office</h4>
+                <p>9-2 Jalan Wangsa Delima 2A<br />Seksyen 5 Wangsa Maju<br />Kuala Lumpur 53300</p>
+                <p style="margin-top: 0.5rem;"><strong>Phone:</strong> +6017 3663 819</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; @DateTime.Now.Year - Transmac Consult. All rights reserved.</p>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,20 @@
+LOGO PLACEMENT INSTRUCTIONS
+===========================
+
+The TMC logo should be placed in this directory with the filename:
+TMC-logo.png
+
+The logo from the attachment (the blue TMC train logo) should be saved here.
+
+Recommended specifications:
+- Format: PNG (with transparency preferred)
+- Dimensions: 400x150px or similar aspect ratio
+- File size: Under 200KB
+
+The website is already configured to display the logo in:
+1. Navigation header (top left)
+2. Browser favicon (tab icon)
+
+Once you place the TMC-logo.png file here, refresh the website to see it appear!
+
+Current location: wwwroot/images/TMC-logo.png
