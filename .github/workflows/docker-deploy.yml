@@ -50,14 +50,9 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-    # Optional: Deploy to Azure Container Instances
-    # Uncomment and configure if deploying to Azure
-    # - name: Deploy to Azure Container Instances
-    #   uses: azure/aci-deploy@v1
-    #   with:
-    #     resource-group: your-resource-group
-    #     dns-name-label: transmac-consult
-    #     image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-    #     name: transmac-consult
-    #     location: eastus
-    #     ports: 8080
+    - name: Trigger Render Deployment
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+      env:
+        RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
